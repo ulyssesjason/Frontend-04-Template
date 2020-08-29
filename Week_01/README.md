@@ -10,16 +10,15 @@ in general:
 ##### Fundementals
 
 * HTML
-
 * CSS
-	a. general selector
-	b. flex model
+	1. general selector
+	2. flex model
 
 * Javascript
-	a. programming fundementals
-	b. functional programming model
-	c. javascript and typescript language feature, closure, monad etc 
-	d. synchronize and asynchronize
+	1. programming fundementals
+	2. functional programming model
+	3. javascript and typescript language feature, closure, monad etc 
+	4. synchronize and asynchronize
 
 
 ##### Frameworks
