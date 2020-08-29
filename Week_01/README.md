@@ -9,15 +9,13 @@ in general:
 
 ##### Fundementals
 
-1. HTML
+* HTML
 
-2. CSS
-
+* CSS
 	a. general selector
 	b. flex model
 
-3. Javascript
-
+* Javascript
 	a. programming fundementals
 	b. functional programming model
 	c. javascript and typescript language feature, closure, monad etc 
