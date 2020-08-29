@@ -1,0 +1,135 @@
+<style>
+    div {
+        background-color: grey;
+        display: inline-block;
+        margin: 30px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+    }
+
+    .green.light {
+        background-color: green;
+    }
+
+    .red.light {
+        background-color: red;
+    }
+
+    .yellow.light {
+        background-color: yellow;
+    }
+
+</style>
+<div class="green"></div>
+<div class="yellow"></div>
+<div class="red"></div>
+
+<script>
+    function green() {
+        let lights = document.getElementsByTagName("div")
+        for (let i = 0; i < 3; i++) {
+            lights[i].classList.remove("light")
+        }
+        document.getElementsByClassName("green")[0].classList.add("light")
+    }
+
+    function red() {
+        let lights = document.getElementsByTagName("div")
+        for (let i = 0; i < 3; i++) {
+            lights[i].classList.remove("light")
+        }
+        document.getElementsByClassName("red")[0].classList.add("light")
+    }
+
+    function yellow() {
+        let lights = document.getElementsByTagName("div")
+        for (let i = 0; i < 3; i++) {
+            lights[i].classList.remove("light")
+        }
+        document.getElementsByClassName("yellow")[0].classList.add("light")
+    }
+
+    function sleep(t) {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, t)
+        })
+    }
+
+    function happen(element, eventName) {
+        return new Promise(((resolve, reject) => {
+            element.addEventListener(eventName, resolve, {once: true})
+        }))
+    }
+
+    let signal = 0
+
+    function go1() {
+        let states = {
+            0: {fun: () => green(), time: 1000},
+            1: {fun: () => yellow(), time: 200},
+            2: {fun: () => red(), time: 500}
+        }
+        setTimeout(function change() {
+            states[signal].fun()
+            signal++
+            if (signal > 2) {
+                signal = 0
+            }
+            go1()
+        }, states[signal].time)
+    }
+
+    function go2() {
+        green()
+        sleep(1000).then(() => {
+            yellow()
+            return sleep(200)
+        }).then(() => {
+            red()
+            return sleep(500)
+        }).then(go2)
+    }
+
+    async function go3() {
+        while (true) {
+            green()
+            await sleep(1000)
+            yellow()
+            await sleep(200)
+            red()
+            await sleep(500)
+        }
+    }
+
+    function* go5() {
+        while (true) {
+            green()
+            yield sleep(1000)
+            yellow()
+            yield sleep(200)
+            red()
+            yield sleep(500)
+        }
+    }
+
+    function run(iterator) {
+        let {value, done} = iterator.next()
+        if (done) {
+            return
+        }
+        if (value instanceof Promise) {
+            value.then(() => {
+                run(iterator)
+            })
+        }
+    }
+
+    function co(generator) {
+        return function () {
+            return run(generator())
+        }
+    }
+
+    go3()
+</script>
