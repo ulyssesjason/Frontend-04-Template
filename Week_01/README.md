@@ -12,10 +12,12 @@ in general:
 1. HTML
 
 2. CSS
+
 	a. general selector
 	b. flex model
 
 3. Javascript
+
 	a. programming fundementals
 	b. functional programming model
 	c. javascript and typescript language feature, closure, monad etc 
