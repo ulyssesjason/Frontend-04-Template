@@ -15,7 +15,70 @@
 </style>
 <div id="container"></div>
 <button onclick="localStorage['map'] = JSON.stringify(map)">save</button>
+<button onclick="localStorage.removeItem('map'); location.reload()">reset</button>
 <script>
+    class Heap {
+        constructor(data, comparator) {
+            this.comparator = comparator || ((a, b) => a - b)
+            this.data = []
+            if (Array.isArray(data)) {
+                for (let i = 0; i < data.length; i++) {
+                    this.push(data[i])
+                }
+            }
+        }
+
+        push(v) {
+            this.data.push(v)
+            let cursor = this.data.length - 1
+            let parent = Math.floor((cursor - 1) / 2)
+            //sift up
+            while (cursor >= 0 && parent >= 0 && this.comparator(this.data[cursor], this.data[parent]) < 0) {
+                this.swap(cursor, parent)
+                cursor = parent
+                parent = Math.floor((cursor - 1) / 2)
+            }
+        }
+
+        top() {
+            return this.data[0]
+        }
+
+        pop() {
+            console.log(this.data)
+            let ret = this.data[0]
+            this.swap(0, this.data.length - 1)
+            this.data.pop()
+
+            let cursor = 0
+            // sift down
+            let size = this.data.length
+            while (cursor < size) {
+                let min = cursor
+                let left = cursor * 2 + 1
+                let right = cursor * 2 + 2
+                if (left < size && this.comparator(this.data[min], this.data[left]) >= 0) {
+                    min = left
+                }
+                if (right < size && this.comparator(this.data[min], this.data[right]) >= 0) {
+                    min = right
+                }
+                if (min === cursor) {
+                    break
+                }
+                this.swap(min, cursor)
+                cursor = min
+            }
+            return ret
+        }
+
+        swap(x, y) {
+            let temp = this.data[x]
+            this.data[x] = this.data[y]
+            this.data[y] = temp
+        }
+    }
+
     let map = localStorage['map'] ? JSON.parse(localStorage['map']) : Array(10000).fill(0)
     let container = document.getElementById('container')
 
@@ -53,6 +116,27 @@
     document.addEventListener("contextmenu", e => e.preventDefault())
 
     function path(map, start, end) {
+        let queue = [start]
 
+        function insert(x, y) {
+            if (x < 0 || x >= 100 || y < 0 || y >= 100) {
+                return
+            }
+            if (map[x * 100 + y]) {
+                return
+            }
+            queue.push([x, y])
+        }
+
+        let d = [[1, 0], [0, -1], [-1, 0], [0, 1]]
+        while (queue.length) {
+            let [x, y] = queue.shift()
+            if (x === end[0] || y === end[1]) {
+                return true
+            }
+            for (let i = 0; i < 4; i++) {
+                insert(x + d[0], y + d[1])
+            }
+        }
     }
 </script>
