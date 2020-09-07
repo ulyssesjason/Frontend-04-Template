@@ -45,7 +45,6 @@
         }
 
         pop() {
-            console.log(this.data)
             let ret = this.data[0]
             this.swap(0, this.data.length - 1)
             this.data.pop()
@@ -133,7 +132,7 @@
             if (x < 0 || x >= 100 || y < 0 || y >= 100) {
                 return
             }
-            if (map[x * 100 + y]) {
+            if (table[x * 100 + y]) {
                 return
             }
             await sleep(5)
@@ -145,9 +144,9 @@
         let d = [[1, 0], [0, -1], [-1, 0], [0, 1], [-1, -1], [1, 1], [1, -1], [-1, 1]]
         while (queue.data.length) {
             let [x, y] = queue.pop()
-            if (x === end[0] || y === end[1]) {
+            if (x === end[0] && y === end[1]) {
                 let path = []
-                while (x !== start[0] && y !== start[1]) {
+                while (x !== start[0] || y !== start[1]) {
                     path.push(map[x * 100 + y]);
                     [x, y] = table[x * 100 + y]
                     container.children[x * 100 + y].style.backgroundColor = "purple"
